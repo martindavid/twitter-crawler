@@ -1,4 +1,3 @@
-from __future__ import print_function
 import json
 import time
 import tweepy
@@ -63,7 +62,7 @@ class TwitterStreamRunner(object):
         group_name: a group that used to fetch a list of keyword
     """
 
-    def __init__(self, group_name):
+    def __init__(self, config):
         database = DB(settings.PG_DB_USER,
                       settings.PG_DB_PASSWORD, settings.PG_DB_NAME)
         database.connect()
