@@ -1,0 +1,5 @@
+pyflakes
+pylint
+pylama
+eradicate
+pip-tools
