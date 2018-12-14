@@ -1,14 +1,10 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
 from datetime import datetime
 from time import sleep
 import tweepy
-from app.db import DB, Keyword, TwitterToken
-from app.tweet_store import TweetStore
-from app.logger import LOGGER as log
-from app.sentiment_analysis import SentimentAnalysis
-import settings
+from app.logger import LOG as log
+# from app.sentiment_analysis import SentimentAnalysis
+from app.config_reader import Config
+# import settings
 
 MAX_COUNT = 100
 
@@ -17,7 +13,7 @@ class TwitterSearch(object):
     """Main class to handle harvesting twitter data
 
     Args:
-        group_name: group name used to filter the keyword
+        config: group name used to filter the keyword
 
     Attributes:
         api: tweepy.API object
@@ -25,25 +21,17 @@ class TwitterSearch(object):
         tw_store = TweetStore instance (manage data access to couchdb)
     """
 
-    def __init__(self, group_name):
+    def __init__(self, config: Config) -> None:
 
-        database = DB(settings.PG_DB_USER,
-                      settings.PG_DB_PASSWORD, settings.PG_DB_NAME)
-        database.connect()
-
-        keyword = Keyword(database.con, database.meta)
-        token = TwitterToken(database.con, database.meta)
 
         """Set tweepy api object and authentication"""
-        token = token.find_by_group(group_name)
+        token = config.tokens[0]
         auth = tweepy.OAuthHandler(
-            token["consumer_key"], token["consumer_secret"])
-        auth.set_access_token(token["access_token"], token["access_token_secret"])
+            token.consumer_key, token.consumer_secret)
+        auth.set_access_token(token.access_token, token.access_token_secret)
 
         self.api = tweepy.API(auth)
-        self.keyword = keyword
-        self.keyword_list = keyword.find_by_group(group_name)
-        self.tw_store = TweetStore(settings.COUCHDB_DB, settings.COUCHDB_SERVER)
+        self.keyword_list = config.keywords
 
     def execute(self):
         """Execute the twitter crawler, loop into the keyword_list"""
@@ -81,7 +69,7 @@ class TwitterSearch(object):
                 if tweet.id == since_id:
                     break
                 # Update sentiment score
-                tweet._json["sentiment"] = SentimentAnalysis.get_sentiment(tweet_text=tweet.text)
+                # tweet._json["sentiment"] = SentimentAnalysis.get_sentiment(tweet_text=tweet.text)
                 self.tw_store.save_tweet(tweet._json)
             max_id = tweets[-1].id
             self.test_rate_limit(api)

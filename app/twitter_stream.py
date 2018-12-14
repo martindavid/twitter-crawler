@@ -2,21 +2,22 @@ import json
 import time
 import tweepy
 from tweepy.streaming import StreamListener
-from app.logger import LOGGER as log
-from app.db import DB, Keyword, TwitterToken
-from app.tweet_store import TweetStore
-from app.sentiment_analysis import SentimentAnalysis
-import settings
+from app.logger import LOG as log
+# from app.sentiment_analysis import SentimentAnalysis
+from app.config_reader import Config
+from app.messaging import Messaging
 
 # Get the box coordinates from http://boundingbox.klokantech.com/
 AUS_GEO_CODE = [113.03, -39.06, 154.73, -12.28]
 
+
 class TwitterStream(StreamListener):
     """A listener class that will listen twitter streaming data"""
-
-    def __init__(self, tw_store):
-        self.tw_store = tw_store
-
+    
+    def __init__(self):
+        self.tweets = 0
+        self.messaging = Messaging('localhost', 32773, 'twitter_feed')
+    
     def on_data(self, data):
         """ Method to passes data from statuses to the on_status method"""
         if 'in_reply_to_status' in data:
@@ -38,8 +39,11 @@ class TwitterStream(StreamListener):
         try:
             tweet = json.loads(status)
             # Update sentiment score
-            tweet["sentiment"] = SentimentAnalysis.get_sentiment(tweet_text=tweet["text"])
-            self.tw_store.save_tweet(tweet)
+            # tweet["sentiment"] = SentimentAnalysis.get_sentiment(tweet_text=tweet["text"])
+            # log.info(f"Tweet - {tweet['text']}")
+            self.tweets = self.tweets + 1
+            self.messaging.publish(json.dumps(tweet))
+            log.info(f"Count {self.tweets}")
         except Exception as e:
             log.error(e)
 
@@ -55,39 +59,26 @@ class TwitterStream(StreamListener):
         return
 
 
-class TwitterStreamRunner(object):
+class TwitterStreamRunner:
     """ Main class to run twitter stream listener
 
     Args:
         group_name: a group that used to fetch a list of keyword
     """
 
-    def __init__(self, config):
-        database = DB(settings.PG_DB_USER,
-                      settings.PG_DB_PASSWORD, settings.PG_DB_NAME)
-        database.connect()
-
-        keyword = Keyword(database.con, database.meta)
-        token = TwitterToken(database.con, database.meta)
-
+    def __init__(self, config: Config) -> None:
         # Set tweepy api object and authentication
-        token = token.find_by_group(group_name)
+        token = config.tokens[0]
         self.auth = tweepy.OAuthHandler(
-            token["consumer_key"], token["consumer_secret"])
-        self.auth.set_access_token(token["access_token"], token["access_token_secret"])
-
+            token.consumer_key, token.consumer_secret)
+        self.auth.set_access_token(token.access_token, token.access_token_secret)
         self.api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
-
-        keyword_list = keyword.find_by_group(group_name)
-        # Construct keywords array from keyword_list dict
-        self.keywords = [keyword["keyword"] for keyword in keyword_list]
-
-        self.tw_store = TweetStore(settings.COUCHDB_DB, settings.COUCHDB_SERVER)
+        self.keywords = config.keywords
 
     def execute(self):
         """Execute the twitter crawler, loop into the keyword_list
         """
-        listen = TwitterStream(self.tw_store)
+        listen = TwitterStream()
         stream = tweepy.Stream(self.auth, listen)
         loop = True
         while loop:

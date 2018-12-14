@@ -1,0 +1,10 @@
+version: '3'
+services:
+  localstack:
+    image: "localstack/localstack"
+    ports:
+      - "8576:4576"
+      - "8572:4572"
+    environment:
+      - SERVICES=kinesis,firehose,sqs,s3,dynamodb
+      - HOSTNAME_EXTERNAL=localstack

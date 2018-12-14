@@ -1,6 +1,5 @@
 from logging.config import dictConfig
 import logging
-import settings
 
 LOGGING = {
     'version': 1,
@@ -28,7 +27,7 @@ LOGGING = {
         'sentry': {
             'level': 'ERROR',
             'class': 'raven.handlers.logging.SentryHandler',
-            'dsn': settings.SENTRY_DSN,
+            'dsn': 'https://14d9c02ed94d46789b6d9ab95aa28cde@sentry.io/158861',
             'enable_breadcrumbs': False
         },
     },
@@ -47,4 +46,4 @@ LOGGING = {
 }
 
 dictConfig(LOGGING)
-LOGGER = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
