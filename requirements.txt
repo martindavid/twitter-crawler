@@ -5,16 +5,22 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 attrs==18.2.0
+boto3==1.9.69
+botocore==1.12.69         # via boto3, s3transfer
 certifi==2018.11.29       # via requests
 chardet==3.0.4            # via requests
 click==7.0
+docutils==0.14            # via botocore
 idna==2.8                 # via requests
+jmespath==0.9.3           # via boto3, botocore
 oauthlib==2.1.0           # via requests-oauthlib
 pika==0.12.0
 pysocks==1.6.8            # via tweepy
+python-dateutil==2.7.5    # via botocore
 raven==6.9.0
 requests-oauthlib==1.0.0  # via tweepy
 requests==2.21.0          # via requests-oauthlib, tweepy
-six==1.12.0               # via tweepy
+s3transfer==0.1.13        # via boto3
+six==1.12.0               # via python-dateutil, tweepy
 tweepy==3.7.0
-urllib3==1.24.1           # via requests
+urllib3==1.24.1           # via botocore, requests

@@ -3,3 +3,4 @@ pylint
 pylama
 eradicate
 pip-tools
+python-dotenv

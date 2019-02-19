@@ -13,11 +13,11 @@ AUS_GEO_CODE = [113.03, -39.06, 154.73, -12.28]
 
 class TwitterStream(StreamListener):
     """A listener class that will listen twitter streaming data"""
-    
+
     def __init__(self):
         self.tweets = 0
-        self.messaging = Messaging('localhost', 32773, 'twitter_feed')
-    
+        self.messaging = Messaging('twitter_stream', port=32776)
+
     def on_data(self, data):
         """ Method to passes data from statuses to the on_status method"""
         if 'in_reply_to_status' in data:
@@ -41,8 +41,8 @@ class TwitterStream(StreamListener):
             # Update sentiment score
             # tweet["sentiment"] = SentimentAnalysis.get_sentiment(tweet_text=tweet["text"])
             # log.info(f"Tweet - {tweet['text']}")
-            self.tweets = self.tweets + 1
-            self.messaging.publish(json.dumps(tweet))
+            self.tweets += 1
+            self.messaging.publish(tweet)
             log.info(f"Count {self.tweets}")
         except Exception as e:
             log.error(e)
@@ -74,6 +74,7 @@ class TwitterStreamRunner:
         self.auth.set_access_token(token.access_token, token.access_token_secret)
         self.api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         self.keywords = config.keywords
+        self.bounding_box = config.bounding_box
 
     def execute(self):
         """Execute the twitter crawler, loop into the keyword_list
@@ -84,7 +85,7 @@ class TwitterStreamRunner:
         while loop:
             try:
                 log.info("Start stream tweets data")
-                stream.filter(locations=AUS_GEO_CODE)
+                stream.filter(locations=self.bounding_box)
                 loop = False
                 log.info("End stream tweets data")
             except Exception as e:

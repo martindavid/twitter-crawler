@@ -3,3 +3,4 @@ pika
 raven
 Click
 attrs
+boto3
