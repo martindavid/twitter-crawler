@@ -16,7 +16,7 @@ class TwitterStream(StreamListener):
 
     def __init__(self):
         self.tweets = 0
-        self.messaging = Messaging('twitter_stream', port=32776)
+        self.messaging = Messaging('twitter_stream', port=32799)
 
     def on_data(self, data):
         """ Method to passes data from statuses to the on_status method"""
@@ -85,7 +85,7 @@ class TwitterStreamRunner:
         while loop:
             try:
                 log.info("Start stream tweets data")
-                stream.filter(locations=self.bounding_box)
+                stream.filter(track=self.keywords)
                 loop = False
                 log.info("End stream tweets data")
             except Exception as e:

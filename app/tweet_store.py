@@ -1,30 +1,27 @@
-from __future__ import print_function
-import couchdb
 import json
+from pymongo import MongoClient
+from app.logger import LOG as log
 
-DEFAULT_URL = 'http://127.0.0.1:5984/'
 
 class TweetStore(object):
-    """ Main class to handle interaction with CouchDB database
+    """ Main class to handle interaction with data store (mongodb)
 
     Args:
-        db_name: database name in couchdb
-        url: connection url for couchdb, by default 'http://127.0.0.1:5984/'
+        db_name: database
+        url: connection url for mongodb, by default 'http://127.0.0.1:27017/'
 
     Attributes:
         server: couchdb server instance
         dbase: database instance of couchdb server
     """
 
-    def __init__(self, db_name, url=DEFAULT_URL):
-        try:
-            self.server = couchdb.Server(url=url)
-            self.dbase = self.server.create(db_name)
-        except couchdb.http.PreconditionFailed:
-            self.dbase = self.server[db_name]
+    def __init__(self, db_name: str, host: str = 'localhost', port: int = 27017) -> None:
+        client = MongoClient(host, port)
+        self.db = client[db_name]
+        self.tweets = self.db.tweets
 
 
-    def save_tweet(self, twitter):
+    def save_tweet(self, twitter) -> None:
         """Save tweet data into database
         Will check if data is not exists then save it, if exists ignore it
 
@@ -35,10 +32,14 @@ class TweetStore(object):
             json_data = twitter
         else:
             json_data = json.loads(twitter)
-        doc = self.dbase.get(json_data["id_str"])
-        if doc is None:
-            try:
-                json_data["_id"] = json_data["id_str"]
-                self.dbase.save(json_data)
-            except Exception as e:
-                print(e)
+
+        try:
+            breakpoint()
+            self.db.tweets.find_one_and_update(
+                {'id_str': json_data['id_str']},
+                {'$inc': {'seq': 1}},
+                projection={'seq': True, '_id': False},
+                upsert=True,
+            )
+        except Exception as e:
+            log.error(e)

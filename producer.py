@@ -1,5 +1,4 @@
 from typing import List, Dict
-import logging
 import click
 from app.config_reader import read_config
 from app.crawler import Crawler
@@ -13,14 +12,13 @@ from app.logger import LOG
 @click.option('--config', '-c', help="json config file containing list of keyword and twitter tokens")
 @click.option('--api-type', '-t', help='choose between stream or search api')
 @click.option('--verbose', '-v', is_flag=True)
-def main(keywords: List[str], access_token: str, access_token_secret: str, 
+def main(keywords: List[str], access_token: str, access_token_secret: str,
          config: str = None, api_type: str = None, verbose: bool = False):
     """
     An entry point to twitter crawler application
     """
-    loglevel = logging.DEBUG if verbose else logging.INFO
-
-    logging.basicConfig(format="%(levelname)s: %(message)s", level=loglevel)
+    loglevel = 'DEBUG' if verbose else 'INFO'
+    LOG.setLevel(loglevel)
     LOG.info(msg=f"Argument {config} {api_type}")
     crawler_config = None
     if config:
@@ -39,11 +37,12 @@ def main(keywords: List[str], access_token: str, access_token_secret: str,
 
 
 def construct_config(keywords: List[str], access_token: str, access_token_secret: str) -> Dict:
-    tokens = [{ "access_token": access_token, "access_token_secret": access_token_secret }]
+    tokens = [{"access_token": access_token, "access_token_secret": access_token_secret}]
     return {
         "keywords": keywords,
         "tokens": tokens
     }
+
 
 if __name__ == '__main__':
     main()

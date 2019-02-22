@@ -4,3 +4,4 @@ raven
 Click
 attrs
 boto3
+pymongo

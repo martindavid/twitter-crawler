@@ -3,7 +3,7 @@ import logging
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
 
     'formatters': {
         'console': {
@@ -20,22 +20,16 @@ LOGGING = {
 
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'console'
-        },
-        'sentry': {
-            'level': 'ERROR',
-            'class': 'raven.handlers.logging.SentryHandler',
-            'dsn': 'https://14d9c02ed94d46789b6d9ab95aa28cde@sentry.io/158861',
-            'enable_breadcrumbs': False
-        },
+        }
     },
 
     'loggers': {
         '': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         },
         'cli': {
