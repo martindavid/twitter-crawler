@@ -18,6 +18,7 @@ class Config:
     keywords: List[str]
     tokens: List[Token]
     bounding_box: List[float]
+    db_name: str
 
 
 
@@ -41,7 +42,8 @@ def read_config(file_location: str) -> Optional[Config]:
             return Config(
                 keywords=config['keywords'],
                 tokens=tokens,
-                bounding_box=config['bounding_box']
+                bounding_box=config['bounding_box'],
+                db_name=config['db_name']
             )
     except Exception as e:
         LOG.error("error_while_read_config", e.args)

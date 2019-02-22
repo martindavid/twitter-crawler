@@ -1,14 +1,14 @@
+import time
 from app.messaging import Messaging
 from app.logger import LOG as log
 from app.tweet_store import TweetStore
-import time
 
 
 class TweetConsumer:
 
     def __init__(self):
-        self.messaging = Messaging('twitter_stream', port=32799)
-        self.store = TweetStore('sandbox', 'localhost', 32777)
+        self.messaging = Messaging('tweets', port=32778)
+        self.store = TweetStore('tweets', 'http://127.0.0.1:32773')
 
     def execute(self):
         try:
@@ -23,6 +23,5 @@ class TweetConsumer:
                 for tweet in tweets:
                     self.store.save_tweet(tweet)
                     log.info(f"Successfully store tweet: {tweet['id_str']}")
-
         except Exception as e:
             log.error(e)

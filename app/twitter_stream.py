@@ -3,7 +3,6 @@ import time
 import tweepy
 from tweepy.streaming import StreamListener
 from app.logger import LOG as log
-# from app.sentiment_analysis import SentimentAnalysis
 from app.config_reader import Config
 from app.messaging import Messaging
 
@@ -14,9 +13,10 @@ AUS_GEO_CODE = [113.03, -39.06, 154.73, -12.28]
 class TwitterStream(StreamListener):
     """A listener class that will listen twitter streaming data"""
 
-    def __init__(self):
+    def __init__(self, messaging):
+        super().__init__()
         self.tweets = 0
-        self.messaging = Messaging('twitter_stream', port=32799)
+        self.messaging = messaging
 
     def on_data(self, data):
         """ Method to passes data from statuses to the on_status method"""
@@ -38,9 +38,6 @@ class TwitterStream(StreamListener):
         """ Handle logic when the data coming """
         try:
             tweet = json.loads(status)
-            # Update sentiment score
-            # tweet["sentiment"] = SentimentAnalysis.get_sentiment(tweet_text=tweet["text"])
-            # log.info(f"Tweet - {tweet['text']}")
             self.tweets += 1
             self.messaging.publish(tweet)
             log.info(f"Count {self.tweets}")
@@ -75,12 +72,13 @@ class TwitterStreamRunner:
         self.api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         self.keywords = config.keywords
         self.bounding_box = config.bounding_box
+        messaging = Messaging(config.db_name, port=32778)
+        self.listener = TwitterStream(messaging)
 
     def execute(self):
         """Execute the twitter crawler, loop into the keyword_list
         """
-        listen = TwitterStream()
-        stream = tweepy.Stream(self.auth, listen)
+        stream = tweepy.Stream(self.auth, self.listener)
         loop = True
         while loop:
             try:

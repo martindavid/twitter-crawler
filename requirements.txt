@@ -10,12 +10,12 @@ botocore==1.12.69         # via boto3, s3transfer
 certifi==2018.11.29       # via requests
 chardet==3.0.4            # via requests
 click==7.0
+couchdb==1.2
 docutils==0.14            # via botocore
 idna==2.8                 # via requests
 jmespath==0.9.3           # via boto3, botocore
 oauthlib==2.1.0           # via requests-oauthlib
 pika==0.12.0
-pymongo==3.7.2
 pysocks==1.6.8            # via tweepy
 python-dateutil==2.7.5    # via botocore
 raven==6.9.0
