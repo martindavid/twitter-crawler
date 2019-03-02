@@ -15,6 +15,9 @@ class Token:
 
 @attr.s(auto_attribs=True)
 class Config:
+    db_con_str: str
+    messaging_host: str
+    messaging_port: str
     keywords: List[str]
     tokens: List[Token]
     bounding_box: List[float]
@@ -40,6 +43,9 @@ def read_config(file_location: str) -> Optional[Config]:
             ) for token in config['tokens']]
 
             return Config(
+                db_con_str=config['db_con_str'],
+                messaging_host=config['messaging_host'],
+                messaging_port=config['messaging_port'],
                 keywords=config['keywords'],
                 tokens=tokens,
                 bounding_box=config['bounding_box'],

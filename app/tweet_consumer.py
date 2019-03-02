@@ -2,13 +2,14 @@ import time
 from app.messaging import Messaging
 from app.logger import LOG as log
 from app.tweet_store import TweetStore
+from app.config_reader import Config
 
 
 class TweetConsumer:
 
-    def __init__(self):
-        self.messaging = Messaging('tweets', port=32778)
-        self.store = TweetStore('tweets', 'http://127.0.0.1:32773')
+    def __init__(self, config: Config) -> None:
+        self.messaging = Messaging('tweets', port=config.messaging_port)
+        self.store = TweetStore('tweets', config.db_con_str)
 
     def execute(self):
         try:

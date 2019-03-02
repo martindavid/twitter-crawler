@@ -72,7 +72,7 @@ class TwitterStreamRunner:
         self.api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         self.keywords = config.keywords
         self.bounding_box = config.bounding_box
-        messaging = Messaging(config.db_name, port=32778)
+        messaging = Messaging(config.db_name, port=config.messaging_port)
         self.listener = TwitterStream(messaging)
 
     def execute(self):
