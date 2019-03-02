@@ -18,6 +18,8 @@ class Config:
     db_con_str: str
     messaging_host: str
     messaging_port: str
+    messaging_username: str
+    messaging_password: str
     keywords: List[str]
     tokens: List[Token]
     bounding_box: List[float]
@@ -43,9 +45,11 @@ def read_config(file_location: str) -> Optional[Config]:
             ) for token in config['tokens']]
 
             return Config(
-                db_con_str=config['db_con_str'],
-                messaging_host=config['messaging_host'],
-                messaging_port=config['messaging_port'],
+                db_con_str=config.get('db_con_str', ''),
+                messaging_host=config.get('messaging_host', 'localhost'),
+                messaging_username=config.get('messaging_username', 'guest'),
+                messaging_password=config.get('messaging_password', 'guest'),
+                messaging_port=config.get('messaging_port', None),
                 keywords=config['keywords'],
                 tokens=tokens,
                 bounding_box=config['bounding_box'],

@@ -6,9 +6,10 @@ import json
 
 class Messaging:
 
-    def __init__(self, queue_name: str, host: str = 'localhost', port: int = 5672) -> None:
+    def __init__(self, queue_name: str, host: str = 'localhost', port: int = 5672, username: str = 'guest', password: str = 'guest') -> None:
+        credentials = pika.PlainCredentials(username, password)
         con = pika.BlockingConnection(
-            pika.ConnectionParameters(host=host, port=port)
+            pika.ConnectionParameters(host=host, port=port, credentials=credentials)
         )
         self.channel = con.channel()
 
