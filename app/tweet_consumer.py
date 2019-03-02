@@ -8,7 +8,9 @@ from app.config_reader import Config
 class TweetConsumer:
 
     def __init__(self, config: Config) -> None:
-        self.messaging = Messaging('tweets', port=config.messaging_port)
+        self.messaging = Messaging('tweets', port=config.messaging_port,
+                                   username=config.messaging_username,
+                                   password=config.messaging_password)
         self.store = TweetStore('tweets', config.db_con_str)
 
     def execute(self):
