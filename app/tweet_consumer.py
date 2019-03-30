@@ -16,7 +16,7 @@ class TweetConsumer:
     def execute(self):
         try:
             while True:
-                tweets = self.messaging.get(size=10)
+                tweets = self.messaging.get(size=50)
 
                 # If there's not tweets, take a 2 mins sleep
                 if len(tweets) == 0:
