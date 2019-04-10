@@ -1,0 +1,24 @@
+{
+  "keywords": ["#govegan", "food"],
+  "bounding_box": [94.72,-10.43,140.39,5.66],
+  "db_con_str": "couchdb host",
+  "messaging_host": "localhost",
+  "messaging_port": <rabbitmq port>,
+  "messaging_username": "<rabbitmq username>",
+  "messaging_password": "<rabbitmq password>",
+  "db_name" : "<couchdb collection name>",
+  "tokens": [
+    {
+      "consumer_key": "",
+      "consumer_secret": "",
+      "access_token": "",
+      "access_token_secret": ""
+    },
+    {
+      "consumer_key": "",
+      "consumer_secret": "",
+      "access_token": "",
+      "access_token_secret": ""
+    }
+  ]
+}
