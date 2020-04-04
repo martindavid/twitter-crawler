@@ -11,7 +11,7 @@ pycodestyle==2.4.0        # via pylama
 pydocstyle==3.0.0         # via pylama
 pyflakes==2.0.0
 pylama==7.6.6
-pylint==2.2.2
+pylint==2.4.4
 six==1.12.0               # via astroid, pip-tools, pydocstyle
 snowballstemmer==1.2.1    # via pydocstyle
 wrapt==1.10.11            # via astroid
