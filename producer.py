@@ -11,9 +11,10 @@ from app.logger import LOG
 @click.option('--access-token-secret', help="twitter access secret token use for crawling")
 @click.option('--config', '-c', help="json config file containing list of keyword and twitter tokens")
 @click.option('--api-type', '-t', help='choose between stream or search api')
+@click.option('--token', "-tu", help="index of token to be used")
 @click.option('--verbose', '-v', is_flag=True)
 def main(keywords: List[str], access_token: str, access_token_secret: str,
-         config: str = None, api_type: str = None, verbose: bool = False):
+         config: str = None, api_type: str = None, token: int = 0, verbose: bool = False):
     """
     An entry point to twitter crawler application
     """
@@ -30,7 +31,7 @@ def main(keywords: List[str], access_token: str, access_token_secret: str,
     if crawler_config:
         LOG.debug(crawler_config)
         LOG.debug(f"Api Type - {api_type}")
-        crawler = Crawler.create_crawler_instance(api_type, crawler_config)
+        crawler = Crawler.create_crawler_instance(api_type, crawler_config, token)
         crawler.execute()
 
     click.echo("Option is required")

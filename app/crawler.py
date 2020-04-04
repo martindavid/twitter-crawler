@@ -9,12 +9,12 @@ class Crawler:
     SEARCH_API = 'search'
 
     @classmethod
-    def create_crawler_instance(cls, api_type: str, config: Dict) -> Union[TwitterSearch, TwitterStreamRunner]:
+    def create_crawler_instance(cls, api_type: str, config: Dict, token_used: int = 0) -> Union[TwitterSearch, TwitterStreamRunner]:
         """
 
         """
         if api_type == cls.STREAM_API:
-            return TwitterStreamRunner(config)
+            return TwitterStreamRunner(config, token_used)
 
         if api_type == cls.SEARCH_API:
-            return TwitterSearch(config)
+            return TwitterSearch(config, token_used)

@@ -63,9 +63,9 @@ class TwitterStreamRunner:
         group_name: a group that used to fetch a list of keyword
     """
 
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, token_used: int) -> None:
         # Set tweepy api object and authentication
-        token = config.tokens[0]
+        token = config.tokens[token_used]
         self.auth = tweepy.OAuthHandler(
             token.consumer_key, token.consumer_secret)
         self.auth.set_access_token(token.access_token, token.access_token_secret)

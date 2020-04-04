@@ -2,6 +2,7 @@ import sqlalchemy
 import logging
 import datetime
 
+
 class DB(object):
     """ Main class to handle connection to database
 
@@ -16,7 +17,12 @@ class DB(object):
     Notes:
         con and meta object will only be set after call connect() method
     """
-    def __init__(self, user, password, database_name, host='localhost', port=5432):
+    def __init__(self,
+                 user: str,
+                 password: str,
+                 database_name: str,
+                 host: str = 'localhost',
+                 port: int = 5432) -> None:
         self.user = user
         self.password = password
         self.database_name = database_name
@@ -25,13 +31,14 @@ class DB(object):
         self.con = None
         self.meta = None
 
-    def connect(self):
+    def connect(self) -> None:
         '''Connect to database then set con and meta attributes'''
 
         # We connect with the help of the PostgreSQL URL
-        # postgresql://federer:grandestslam@localhost:5432/tennis
+        # postgresql://<username>:<password>@<host>:5432/<dbname>
         url = 'postgresql://{}:{}@{}:{}/{}'
-        url = url.format(self.user, self.password, self.host, self.port, self.database_name)
+        url = url.format(self.user, self.password, self.host, self.port,
+                         self.database_name)
 
         try:
             # The return value of create_engine() is our connection object
@@ -53,8 +60,7 @@ class Keyword(object):
     """Handle database access for Keyword table
 
     Attributes:
-        con: database connection object from sqlalchemy initialization
-        meta: database meta object from sqlalchemy initialization
+        con: database connection object from sqlalchemy initialization meta: database meta object from sqlalchemy initialization
         data: keyword table from database
     """
     def __init__(self, con, meta):
@@ -74,7 +80,8 @@ class Keyword(object):
                 - max_id
                 - since_id
         """
-        search_clause = self.data.select().where(self.data.c.keyword_group == group_name)
+        search_clause = self.data.select().where(
+            self.data.c.keyword_group == group_name)
         results = []
         for result in self.con.execute(search_clause):
             keyword = {}
@@ -133,7 +140,8 @@ class TwitterToken(object):
             - access_token
             - access_token_secret
         """
-        search_clause = self.data.select().where(self.data.c.keyword_group == group_name)
+        search_clause = self.data.select().where(
+            self.data.c.keyword_group == group_name)
         results = {}
         for result in self.con.execute(search_clause):
             results["consumer_key"] = result[1]
