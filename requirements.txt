@@ -1,5 +1,5 @@
 attrs==18.2.0
-boto3==1.9.69
+boto3==1.12.36
 botocore==1.12.69         # via boto3, s3transfer
 certifi==2018.11.29       # via requests
 chardet==3.0.4            # via requests
