@@ -1,0 +1,35 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylama = "*"
+pylint = "*"
+python-language-server = "*"
+
+[packages]
+attrs = "==18.2.0"
+boto3 = "==1.9.69"
+botocore = "==1.12.69"
+certifi = "==2018.11.29"
+chardet = "==3.0.4"
+click = "==7.0"
+couchdb = "==1.2"
+docutils = "==0.14"
+idna = "==2.8"
+jmespath = "==0.9.3"
+oauthlib = "==2.1.0"
+pika = "==0.12.0"
+python-dateutil = "==2.7.5"
+raven = "==6.9.0"
+requests-oauthlib = "==1.0.0"
+requests = "==2.21.0"
+s3transfer = "==0.1.13"
+six = "==1.12.0"
+tweepy = "==3.7.0"
+urllib3 = "==1.24.1"
+PySocks = "==1.6.8"
+
+[requires]
+python_version = "3.8"
