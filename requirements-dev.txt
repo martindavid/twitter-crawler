@@ -10,7 +10,7 @@ pip-tools==3.1.0
 pycodestyle==2.4.0        # via pylama
 pydocstyle==3.0.0         # via pylama
 pyflakes==2.0.0
-pylama==7.6.6
+pylama==7.7.1
 pylint==2.2.2
 six==1.12.0               # via astroid, pip-tools, pydocstyle
 snowballstemmer==1.2.1    # via pydocstyle
