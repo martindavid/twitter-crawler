@@ -31,7 +31,7 @@ def main(keywords: List[str], access_token: str, access_token_secret: str,
     if crawler_config:
         LOG.debug(crawler_config)
         LOG.debug(f"Api Type - {api_type}")
-        crawler = Crawler.create_crawler_instance(api_type, crawler_config, token)
+        crawler = Crawler.create_crawler_instance(api_type, crawler_config, int(token))
         crawler.execute()
 
     click.echo("Option is required")

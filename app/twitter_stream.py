@@ -83,7 +83,8 @@ class TwitterStreamRunner:
         while loop:
             try:
                 log.info("Start stream tweets data")
-                stream.filter(track=self.keywords)
+                log.info(f"Area for stream -> {self.bounding_box}", )
+                stream.filter(track=self.keywords, locations=[94.9,-8.88,140.9,5.86])
                 loop = False
                 log.info("End stream tweets data")
             except Exception as e:
