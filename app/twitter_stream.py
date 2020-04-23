@@ -43,6 +43,8 @@ class TwitterStream(StreamListener):
             log.info(f"Count {self.tweets}")
         except Exception as e:
             log.error(e)
+            log.error(status)
+            self.on_timeout()
 
     def on_error(self, status):
         """ Handle any error throws from stream API """
