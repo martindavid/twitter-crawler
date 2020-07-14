@@ -8,7 +8,7 @@ click==7.0
 couchdb==1.2
 docutils==0.14
 idna==2.8
-jmespath==0.9.3
+jmespath==0.10.0
 oauthlib==2.1.0
 pika==0.12.0
 pysocks==1.6.8
